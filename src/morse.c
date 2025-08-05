@@ -85,7 +85,7 @@ void printDataInOrder(s_morse *p_head)
         return;
     }
 
-    printDataInorder(p_head->dot);
+    printDataInOrder(p_head->dot);
 
     if (p_head->character != '\0')
     {
@@ -95,7 +95,7 @@ void printDataInOrder(s_morse *p_head)
             printf("%c\n", p_head->character);
     }
 
-    printDataInorder(p_head->dash);
+    printDataInOrder(p_head->dash);
 }
 
 void readFile(FILE *file)
@@ -123,10 +123,22 @@ void readFile(FILE *file)
     }
 }
 
+// Hopefully deletes the tree
+void deleteTree(s_morse *input)
+{
+    if (input == NULL)
+        return;
+
+    deleteTree(input->dot);
+    deleteTree(input->dash);
+
+    free(input);
+}
+
 int main()
 {
     FILE *file;
-    file = fopen("morse.txt", "r");
+    file = fopen("../morse.txt", "r");
     if (file == NULL)
     {
         fprintf(stderr, "File opening failed\n");
@@ -137,6 +149,10 @@ int main()
     readFile(file);
     printDataPreOrder(head);
     fclose(file);
+
+    // Delete the tree
+    deleteTree(head);
+    head = NULL;
 
     return 0;
 }

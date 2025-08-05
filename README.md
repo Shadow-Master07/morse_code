@@ -45,7 +45,7 @@ NOTE:
 
 TODO: 
 - create a tree deletion function so as to return the memory used in heap by our program
-- punction marks will take 6-7 characters, modify the code for that accordingly
+- punction marks will take 6-8 characters, modify the code for that accordingly
 - create a makefile to compile code with one command (last thing)
 - create a stack for using user input and pushing it to stack so the initial morse is written backwards, from top to bottom and pop the values to get the correct morse value
   - create a linked list of all the stacks that will be storing the morse
@@ -55,3 +55,4 @@ TODO:
   - when the last node is popped, assign the pointer head/temp to NULL
 - as for the morse code to character creation it is easy
   - traverse the morse code and move to the appropriate character direction, morse->dash or morse->dot and at the final postion, print the character
+- Add parameter passing options for make this a tool for linux specifically
