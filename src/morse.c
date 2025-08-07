@@ -1,4 +1,5 @@
 #include "../lib/morse.h"
+#include "../lib/cliArgs.h"
 
 s_morse *head = NULL;
 
@@ -135,24 +136,10 @@ void deleteTree(s_morse *input)
     free(input);
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-    FILE *file;
-    file = fopen("../morse.txt", "r");
-    if (file == NULL)
-    {
-        fprintf(stderr, "File opening failed\n");
-        exit(file_open_failed);
-    }
-    head = createNode(NULL, '\0');
-
-    readFile(file);
-    printDataPreOrder(head);
-    fclose(file);
-
-    // Delete the tree
-    deleteTree(head);
-    head = NULL;
+    // new things
+    cliParser(argc, argv);
 
     return 0;
 }

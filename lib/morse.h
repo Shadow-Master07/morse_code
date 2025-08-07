@@ -7,10 +7,11 @@
 #include <ctype.h>
 #include <string.h>
 
-#define morse_max_length 6 // 1 space for null character and remaining for maximum length of morse values
-#define memory_allocation_failed 1
+#define morse_max_length 9 // 1 space for null character and remaining for maximum length of morse values
 #define function_ran_success 0
+#define memory_allocation_failed 1
 #define file_open_failed 2
+#define less_parameters 3
 
 // Struct to be used
 typedef struct morse
@@ -29,5 +30,16 @@ int insert(char character, char *morseCode, int len);
 void printDataPreOrder(s_morse *p_head);
 void printDataInOrder(s_morse *p_head);
 void readFile(FILE *file);
+void deleteTree(s_morse *input);
+
+// Create some transmission related functions
+/*
+    Understood -> ...-.
+    error -> ........ (8 dots)
+    invitation to transmit -> -.-
+    wait -> .-..
+    end of work -> ...-.-
+    starting signal -> -.-.-
+*/
 
 #endif

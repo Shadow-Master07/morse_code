@@ -44,7 +44,6 @@ NOTE:
   - Accented characters are introduced in morse.txt file that refer to english only characters as of now, so it is put as blank space character " " (space) for now to let it be skipped
 
 TODO: 
-- create a tree deletion function so as to return the memory used in heap by our program
 - punction marks will take 6-8 characters, modify the code for that accordingly
 - create a makefile to compile code with one command (last thing)
 - create a stack for using user input and pushing it to stack so the initial morse is written backwards, from top to bottom and pop the values to get the correct morse value
