@@ -3,6 +3,7 @@
 
 extern s_morse *head;
 
+// ctf mode feature
 void run_ctf_mode()
 {
     FILE *file = fopen("../morse.txt", "r");
@@ -23,6 +24,7 @@ void run_ctf_mode()
     head = NULL;
 }
 
+// real world transmission happening here
 void run_real_mode()
 {
     FILE *file = fopen("../morse.txt", "r");
