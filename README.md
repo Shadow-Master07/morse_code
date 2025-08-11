@@ -40,6 +40,32 @@ struct morse
   char last_morse;              // Stores the ending character of morse notation
 }
 ```
+
+```C
+// Using this tokenisation method to read further morse codes from string to use it accordingly
+// C program for splitting a string
+// using strtok()
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+    char str[] = "Geeks-for-Geeks";
+
+    // Returns first token
+    char* token = strtok(str, " - ");
+
+    // Keep printing tokens while one of the
+    // delimiters present in str[].
+    while (token != NULL) {
+        printf(" % s\n", token);
+        token = strtok(NULL, " - ");
+    }
+
+    return 0;
+}
+```
+
 NOTE:
   - Accented characters are introduced in morse.txt file that refer to english only characters as of now, so it is put as blank space character " " (space) for now to let it be skipped
 
@@ -55,3 +81,8 @@ TODO:
 - as for the morse code to character creation it is easy
   - traverse the morse code and move to the appropriate character direction, morse->dash or morse->dot and at the final postion, print the character
 - Add parameter passing options for make this a tool for linux specifically
+
+
+TODO:
+- New task is to create a DSA.c file to separate all the Data Structures into one big mess
+- Import this big mess to all the other places

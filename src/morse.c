@@ -1,7 +1,7 @@
 #include "../lib/morse.h"
 #include "../lib/cliArgs.h"
 
-s_morse *head = NULL;
+s_morse *treeHead = NULL;
 
 // Create the node
 s_morse *createNode(s_morse *parent, char last_morse)
@@ -23,7 +23,7 @@ s_morse *createNode(s_morse *parent, char last_morse)
 
 s_morse *giveAddress(char *morseCode, int len)
 {
-    s_morse *temp = head;
+    s_morse *temp = treeHead;
     for (int i = 0; i < len - 1; i++)
     {
         if (morseCode[i] == '.')
