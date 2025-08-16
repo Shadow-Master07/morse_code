@@ -1,0 +1,40 @@
+# =========================
+# Makefile for Morse Project (Windows / MinGW)
+# =========================
+
+# Compiler
+CC = gcc
+
+# Folders
+SRC_DIR = src
+OBJ_DIR = intermediates
+BIN = main.exe
+
+# Find all .c files in src/
+SRC = $(wildcard $(SRC_DIR)/*.c)
+
+# Replace src/*.c with intermediates/*.o
+OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
+
+# Flags
+CFLAGS = -Wall -Ilib
+
+# Default target
+all: $(BIN)
+
+# Link final executable
+$(BIN): $(OBJ)
+	$(CC) $(OBJ) -o $@
+
+# Rule to compile .c into .o inside intermediates/
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Create intermediates folder if it doesn't exist
+$(OBJ_DIR):
+	@if not exist "$(OBJ_DIR)" mkdir "$(OBJ_DIR)"
+
+# Clean up intermediates and binary (Windows)
+clean:
+	@if exist "$(OBJ_DIR)" rmdir /S /Q "$(OBJ_DIR)"
+	@if exist "$(BIN)" del /Q "$(BIN)"
