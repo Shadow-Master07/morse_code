@@ -1,19 +1,23 @@
-# =========================
-# Makefile for Morse Project (Windows / MinGW)
-# =========================
+.SUFFIXES:   # disable implicit rules
 
-# Compiler
 CC = gcc
 
-# Folders
+# Directories
 SRC_DIR = src
-OBJ_DIR = intermediates
-BIN = main.exe
+INT_DIR = intermediates
+PRE_DIR = $(INT_DIR)/preprocessed
+ASM_DIR = $(INT_DIR)/assembly
+OBJ_DIR = $(INT_DIR)/objects
+BIN_DIR = $(INT_DIR)/binary
+LINK_DIR = $(INT_DIR)/link
 
-# Find all .c files in src/
+BIN = $(BIN_DIR)/main.exe
+MAP = $(LINK_DIR)/main.map
+
+# Sources and transformed file lists
 SRC = $(wildcard $(SRC_DIR)/*.c)
-
-# Replace src/*.c with intermediates/*.o
+PRE = $(patsubst $(SRC_DIR)/%.c, $(PRE_DIR)/%.i, $(SRC))
+ASM = $(patsubst $(SRC_DIR)/%.c, $(ASM_DIR)/%.s, $(SRC))
 OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 
 # Flags
@@ -22,19 +26,42 @@ CFLAGS = -Wall -Ilib
 # Default target
 all: $(BIN)
 
-# Link final executable
-$(BIN): $(OBJ)
-	$(CC) $(OBJ) -o $@
+# Link step (produce exe + map file)
+$(BIN): $(OBJ) | $(BIN_DIR) $(LINK_DIR)
+	$(CC) $(OBJ) -o $@ -Wl,-Map,$(MAP)
 
-# Rule to compile .c into .o inside intermediates/
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+# Object step (from assembly)
+$(OBJ_DIR)/%.o: $(ASM_DIR)/%.s | $(OBJ_DIR)
+	$(CC) -c $< -o $@
 
-# Create intermediates folder if it doesn't exist
-$(OBJ_DIR):
-	@if not exist "$(OBJ_DIR)" mkdir "$(OBJ_DIR)"
+# Assembly step (from preprocessed)
+$(ASM_DIR)/%.s: $(PRE_DIR)/%.i | $(ASM_DIR)
+	$(CC) $(CFLAGS) -S -masm=intel $< -o $@
 
-# Clean up intermediates and binary (Windows)
+# Preprocessing step (from C source)
+$(PRE_DIR)/%.i: $(SRC_DIR)/%.c | $(PRE_DIR)
+	$(CC) $(CFLAGS) -E $< -o $@
+
+# Ensure directories exist
+$(PRE_DIR) $(ASM_DIR) $(OBJ_DIR) $(BIN_DIR) $(LINK_DIR):
+	@if not exist "$@" mkdir "$@"
+
+# -------------------
+# Explicit stages
+# -------------------
+preprocessed: $(PRE)
+assembly: $(ASM)
+objects: $(OBJ)
+
+# Debug build
+debug: CFLAGS += -g -O0
+debug: clean all
+
 clean:
-	@if exist "$(OBJ_DIR)" rmdir /S /Q "$(OBJ_DIR)"
-	@if exist "$(BIN)" del /Q "$(BIN)"
+	@if exist "$(INT_DIR)" rmdir /S /Q "$(INT_DIR)"
+
+# Run target
+run: all
+	$(BIN)
+
+.PHONY: all clean debug run preprocessed assembly objects
