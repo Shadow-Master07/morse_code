@@ -3,8 +3,49 @@
 #include "../lib/cliArgs.h"
 #include "../lib/dsa.h"
 
+// Need to add this to other header file for future use
+// Taken from CHATGPT
+char *readToken(FILE *file)
+{
+    int capacity = 64;
+    int length = 0;
+    char *token = malloc(capacity);
+    if (!token)
+    {
+        return NULL;
+    }
+
+    int c;
+
+    while ((c = fgetc(file)) != EOF && isspace(c))
+        ; // Infinite loop to skip leading spaces
+
+    if (c == EOF)
+    {
+        free(token);
+        return NULL;
+    }
+
+    // Read until next space or EOF
+    do
+    {
+        if (length + 1 >= capacity)
+        {
+            capacity *= 2;
+            token = realloc(token, capacity);
+            if (!token)
+                return NULL;
+        }
+        token[length++] = (char)c;
+        c = fgetc(file);
+    } while (c != EOF && !isspace(c));
+
+    token[length] = '\0';
+    return token;
+}
+
 // ================= MODE FUNCTIONS =================
-void run_ctf_mode(int fileOrMorse, char *string)
+void runCtfMode(int fileOrMorse, char *string)
 {
     FILE *file = fopen("morse.txt", "r");
     if (!file)
@@ -20,25 +61,42 @@ void run_ctf_mode(int fileOrMorse, char *string)
     if (fileOrMorse == FILE_MODE)
     {
         // handle file mode
+        FILE *inputFile = fopen(string, "r");
+        // char line[256];
+        if (inputFile == NULL)
+        {
+            fprintf(stderr, "File opening failed\n");
+            exit(file_open_failed);
+        }
+
+        s_queueNode *queueHead = NULL;
+        // Using the new function from here
+        char *token = NULL;
+        while ((token = readToken(inputFile)) != NULL)
+        {
+            insertQueue(traverseTree(token), &queueHead);
+            free(token);
+        }
+        printQueue(queueHead);
     }
     else if (fileOrMorse == MORSE_MODE)
     {
-        s_queueNode *head = NULL;
+        s_queueNode *queueHead = NULL;
         char *token = strtok(string, " ");
         while (token != NULL)
         {
-            insertQueue(traverseTree(token), &head);
+            insertQueue(traverseTree(token), &queueHead);
             token = strtok(NULL, " ");
         }
 
-        printQueue(head);
+        printQueue(queueHead);
     }
 
     deleteTree(treeHead);
     treeHead = NULL;
 }
 
-void run_real_mode(int fileOrMorse, char *string)
+void runRealMode(int fileOrMorse, char *string)
 {
     FILE *file = fopen("../morse.txt", "r");
     if (!file)
@@ -101,7 +159,7 @@ void cliParser(int argc, char *argv[])
     char *string = NULL;
     if (argc < 2)
     {
-        fprintf(stderr, "Usage: %s --mode=ctf|real\n", argv[0]);
+        fprintf(stderr, "Usage: %s --mode ctf|real\n", argv[0]);
         exit(1);
     }
 
@@ -143,11 +201,11 @@ void cliParser(int argc, char *argv[])
 
     if (mode == 0)
     {
-        run_ctf_mode(fileOrMorse, string);
+        runCtfMode(fileOrMorse, string);
     }
     else if (mode == 1)
     {
-        run_real_mode(fileOrMorse, string);
+        runRealMode(fileOrMorse, string);
     }
     else
     {

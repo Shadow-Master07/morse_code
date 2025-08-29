@@ -71,7 +71,6 @@ NOTE:
 
 TODO: 
 - punction marks will take 6-8 characters, modify the code for that accordingly
-- create a makefile to compile code with one command (last thing)
 - create a stack for using user input and pushing it to stack so the initial morse is written backwards, from top to bottom and pop the values to get the correct morse value
   - create a linked list of all the stacks that will be storing the morse
   - search the character in the tree and push the morse->last_morse to the stack then move to the parent with morse->parent
@@ -80,9 +79,9 @@ TODO:
   - when the last node is popped, assign the pointer head/temp to NULL
 - as for the morse code to character creation it is easy
   - traverse the morse code and move to the appropriate character direction, morse->dash or morse->dot and at the final postion, print the character
+    - do this for files now
 - Add parameter passing options for make this a tool for linux specifically
 
 
-TODO:
-- New task is to create a DSA.c file to separate all the Data Structures into one big mess
-- Import this big mess to all the other places
+CURRENT LOCATION:
+- Working on cliArgs.c runCtfMode()

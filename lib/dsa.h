@@ -4,11 +4,9 @@
 #include "morse.h"
 
 // --------- Tree Functions --------
-s_morse *createNode(s_morse *parent, char last_morse);    // Creates a new Morse tree node
 int insertTree(char character, char *morseCode, int len); // Inserts character with Morse mapping into tree
 void printDataPreOrder(s_morse *p_head);                  // Prints tree in pre-order
 void printDataInOrder(s_morse *p_head);                   // Prints tree in in-order
-void deleteTree(s_morse *input);                          // Frees entire Morse tree
 char traverseTree(char morse[]);                          // Traverses tree to decode Morse sequence
 
 // ---- Queue Functions ----

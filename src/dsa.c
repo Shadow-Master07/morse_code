@@ -87,23 +87,6 @@ char traverseTree(char morse[])
     return temp->character;
 }
 
-s_morse *createNode(s_morse *parent, char last_morse)
-{
-    s_morse *temp = (s_morse *)malloc(sizeof(s_morse));
-    if (!temp)
-    {
-        fprintf(stderr, "Memory allocation failed\n");
-        exit(memory_allocation_failed);
-    }
-
-    temp->parent = parent;
-    temp->dot = NULL;
-    temp->dash = NULL;
-    temp->character = '\0';
-    temp->last_morse = last_morse;
-    return temp;
-}
-
 int insertTree(char character, char *morseCode, int len)
 {
     if (character == ' ')
@@ -155,13 +138,153 @@ void printDataInOrder(s_morse *p_head)
     printDataInOrder(p_head->dash);
 }
 
-void deleteTree(s_morse *input)
+// ================= STACK FUNCTIONS =================
+void pushStack(char data, s_stackNode **top)
 {
-    if (input == NULL)
-        return;
+    s_stackNode *newNode = (s_stackNode *)malloc(sizeof(s_stackNode));
+    if (!newNode)
+    {
+        fprintf(stderr, "Memory allocation failed in pushStack\n");
+        exit(memory_allocation_failed);
+    }
+    newNode->data = data;
+    newNode->next = *top;
+    *top = newNode;
+}
 
-    deleteTree(input->dot);
-    deleteTree(input->dash);
+char popStack(s_stackNode **top)
+{
+    if (*top == NULL)
+    {
+        fprintf(stderr, "Stack underflow in popStack\n");
+        exit(incomplete_parameters); // Using existing error code as "underflow"
+    }
+    s_stackNode *temp = *top;
+    char data = temp->data;
+    *top = temp->next;
+    free(temp);
+    return data;
+}
 
-    free(input);
+char peekStack(s_stackNode *top)
+{
+    if (top == NULL)
+    {
+        fprintf(stderr, "Stack is empty in peekStack\n");
+        exit(incomplete_parameters);
+    }
+    return top->data;
+}
+
+int isStackEmpty(s_stackNode *top)
+{
+    return (top == NULL);
+}
+
+// --------- EXTRA FUNCTIONALITIES ---------
+void clearStack(s_stackNode **top)
+{
+    while (!isStackEmpty(*top))
+    {
+        popStack(top);
+    }
+}
+
+int stackSize(s_stackNode *top)
+{
+    int count = 0;
+    while (top != NULL)
+    {
+        count++;
+        top = top->next;
+    }
+    return count;
+}
+
+void printStack(s_stackNode *top)
+{
+    if (top == NULL)
+    {
+        fprintf(stderr, "Stack is empty in printStack\n");
+        exit(incomplete_parameters);
+    }
+
+    s_stackNode *curr = top;
+    while (curr != NULL)
+    {
+        printf("%c ", curr->data);
+        curr = curr->next;
+    }
+    printf("\n");
+}
+
+void reverseStack(s_stackNode **top)
+{
+    if (*top == NULL)
+    {
+        fprintf(stderr, "Stack is empty in reverseStack\n");
+        exit(incomplete_parameters);
+    }
+
+    s_stackNode *prev = NULL, *curr = *top, *next = NULL;
+    while (curr != NULL)
+    {
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    *top = prev;
+}
+
+void duplicateTop(s_stackNode **top)
+{
+    if (*top == NULL)
+    {
+        fprintf(stderr, "Stack is empty in duplicateTop\n");
+        exit(incomplete_parameters);
+    }
+
+    pushStack((*top)->data, top);
+}
+
+char *stackToString(s_stackNode *top)
+{
+    if (top == NULL)
+    {
+        fprintf(stderr, "Stack is empty in stackToString\n");
+        exit(incomplete_parameters);
+    }
+
+    int size = stackSize(top);
+    char *str = (char *)malloc(size + 1);
+    if (!str)
+    {
+        fprintf(stderr, "Memory allocation failed in stackToString\n");
+        exit(memory_allocation_failed);
+    }
+
+    s_stackNode *curr = top;
+    int i = 0;
+    while (curr != NULL)
+    {
+        str[i++] = curr->data;
+        curr = curr->next;
+    }
+    str[i] = '\0';
+    return str;
+}
+
+void pushMultiple(s_stackNode **top, const char *data)
+{
+    if (data == NULL)
+    {
+        fprintf(stderr, "Invalid string in pushMultiple\n");
+        exit(incomplete_parameters);
+    }
+
+    for (int i = 0; data[i] != '\0'; i++)
+    {
+        pushStack(data[i], top);
+    }
 }

@@ -26,4 +26,8 @@ typedef struct stackNode
     struct stackNode *next; // Pointer to the next node (below this one in stack)
 } s_stackNode;
 
+// -------- Tree node creation ----------
+s_morse *createNode(s_morse *parent, char last_morse); // Creates a new Morse tree node
+void deleteTree(s_morse *input);                       // Frees entire Morse tree
+
 #endif

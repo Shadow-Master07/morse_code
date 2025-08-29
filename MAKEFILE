@@ -11,7 +11,7 @@ OBJ_DIR = $(INT_DIR)/objects
 BIN_DIR = $(INT_DIR)/binary
 LINK_DIR = $(INT_DIR)/link
 
-BIN = $(BIN_DIR)/main.exe
+BIN = ./main.exe
 MAP = $(LINK_DIR)/main.map
 
 # Sources and transformed file lists
@@ -59,6 +59,7 @@ debug: clean all
 
 clean:
 	@if exist "$(INT_DIR)" rmdir /S /Q "$(INT_DIR)"
+	@if exist "./main.exe" del "./main.exe"
 
 # Run target
 run: all
