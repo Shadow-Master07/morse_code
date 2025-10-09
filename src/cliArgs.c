@@ -154,7 +154,7 @@ void runRealMode(int fileOrMorse, char *string)
 // ================= CLI PARSER FUNCTION =================
 void cliParser(int argc, char *argv[])
 {
-    int mode = -1;
+    int ctfOrReal = -1;
     int fileOrMorse = -1;
     char *string = NULL;
     if (argc < 2)
@@ -169,11 +169,11 @@ void cliParser(int argc, char *argv[])
         {
             if (strcmp(argv[i + 1], "ctf") == 0)
             {
-                mode = 0;
+                ctfOrReal = 0;
             }
             if (strcmp(argv[i + 1], "real") == 0)
             {
-                mode = 1;
+                ctfOrReal = 1;
             }
             i++;
         }
@@ -193,17 +193,17 @@ void cliParser(int argc, char *argv[])
         }
     }
 
-    if ((mode == -1) || (fileOrMorse == -1))
+    if ((ctfOrReal == -1) || (fileOrMorse == -1))
     {
         fprintf(stderr, "Usage: %s --mode ctf|real [--morse \"<morse_string>\" | --file <filename>]\n", argv[0]);
         exit(incomplete_parameters);
     }
 
-    if (mode == 0)
+    if (ctfOrReal == 0)
     {
         runCtfMode(fileOrMorse, string);
     }
-    else if (mode == 1)
+    else if (ctfOrReal == 1)
     {
         runRealMode(fileOrMorse, string);
     }
