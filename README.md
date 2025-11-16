@@ -78,3 +78,4 @@ TODO:
   - all this is in a linked list of stacks and we pop the first stack and move to the next linked list node for the next character
   - when the last node is popped, assign the pointer head/temp to NULL
 - Add parameter passing options for make this a tool for linux specifically
+- Important: When the morse is not in the tree, or incorrect morse is entered, exit the loop

@@ -98,7 +98,7 @@ void runCtfMode(int fileOrMorse, char *string)
 
 void runRealMode(int fileOrMorse, char *string)
 {
-    FILE *file = fopen("../morse.txt", "r");
+    FILE *file = fopen("morse.txt", "r");
     if (!file)
     {
         fprintf(stderr, "Could not open morse.txt\n");
@@ -111,6 +111,7 @@ void runRealMode(int fileOrMorse, char *string)
 
     printf("Real-world Mode: Type Morse codes (e.g., .-- or -.-.), or 'exit' to quit.\n");
 
+    // This runs like a command prompt to be used in networking later on
     char input[morse_max_length];
     while (1)
     {
@@ -142,7 +143,7 @@ void runRealMode(int fileOrMorse, char *string)
         }
 
         if (valid && temp->character != '\0')
-            printf("Character: %c\n", temp->character);
+            printf("Character: %c\n", temp->character); // Need to fix this line for command line output
         else
             printf("Invalid Morse Code\n");
     }
