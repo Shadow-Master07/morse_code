@@ -1,3 +1,15 @@
+# Installation
+## Requirements:
+  - GNU Make 3.81 or newer
+  - gcc 15.2.0 MSYS2 or greater
+
+## Installation method:
+```bash
+$> git clone https://github.com/Shadow-Master07/morse_code
+$> make all (or just use "make")
+$> ./main.exe <parameters>
+```
+
 # Morse Code Translator and Creator
 ## Languages Supported
 - ### By default
